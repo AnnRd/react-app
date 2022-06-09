@@ -13,9 +13,9 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {name: 'John Brown', salary: 800, increase: false, like: true, id: 1},
-                {name: 'David Smith', salary: 3000, increase: true, like: false, id: 2},
-                {name: 'Michael Cornel', salary: 5000, increase: false, like: false, id: 3}
+                {name: 'John Brown', salary: 800, increase: false, rise: true, id: 1},
+                {name: 'David Smith', salary: 3000, increase: true, rise: false, id: 2},
+                {name: 'Michael Cornel', salary: 5000, increase: false, rise: false, id: 3}
             ]
         }
         this.maxId = 4;
@@ -33,6 +33,7 @@ class App extends Component {
             name,
             salary,
             increase: false,
+            rise:false,
             id: this.maxId++
         }
 
@@ -46,17 +47,32 @@ class App extends Component {
     }
     
     onToggleIncrease = (id) => {
-        console.log(`Increase ${id}`);
+        this.setState( ({data}) => {
+            const index = data.findIndex(item => item.id === id);
+            const objBeforeChange = data[index];
+
+            const newObj = {...objBeforeChange, increase: !objBeforeChange.increase};
+            const newArr = [...data.slice(0, index), newObj, ...data.slice(index + 1)]; // до нового объекта + новый объект + после
+
+            return {
+                data: newArr
+            }
+        })
     }
 
-    onToggleLike = (id) => {
-        console.log(`Like ${id}`);
+    onTogglerise = (id) => {
+        console.log(`rise ${id}`);
     }
-
+ 
     render() {
+        // const employees = this.state.date.length;
+        // const increased = this.state.date.length;
+
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo
+                countAll = {this.countAll}
+                countIncrease = {this.countIncrease}/>
     
                 <div className="search-panel">
                     <SearchPanel/>
@@ -66,7 +82,7 @@ class App extends Component {
                 data = {this.state.data}
                 onDelete = {this.deleteItem}
                 onToggleIncrease = {this.onToggleIncrease}
-                onToggleLike = {this.onToggleLike}/>
+                onTogglerise = {this.onTogglerise}/>
                 <EmployeesAddForm onAdd = {this.addItem}/>
             </div>
         );
