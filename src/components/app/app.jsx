@@ -103,7 +103,7 @@ class App extends Component {
     
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch = {this.onUpdateSearch}/>
-                    <AppFilter/>
+                    <AppFilter filter = {filter}/>
                 </div>
                 <EmployeesList
                 data = {visibleData}
