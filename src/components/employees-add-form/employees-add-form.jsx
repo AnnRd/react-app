@@ -20,6 +20,10 @@ constructor(props) {
     onSubmit = (event) => {
         event.preventDefault();
 
+        if (this.state.name.length < 2 || this.state.salary < 1) {
+            return;
+        }
+
         this.props.onAdd(this.state.name, this.state.salary);
         this.setState({
             name: '',

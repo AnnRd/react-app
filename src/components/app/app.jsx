@@ -16,7 +16,8 @@ class App extends Component {
                 {name: 'John Brown', salary: 800, increase: false, rise: true, id: 1},
                 {name: 'David Smith', salary: 3000, increase: true, rise: false, id: 2},
                 {name: 'Michael Cornel', salary: 5000, increase: false, rise: false, id: 3}
-            ]
+            ],
+            term: ''
         }
         this.maxId = 4;
     }
@@ -29,21 +30,21 @@ class App extends Component {
     }
 
     addItem = (name, salary) => {
-        const newItem = {
-            name,
-            salary,
-            increase: false,
-            rise:false,
-            id: this.maxId++
-        }
-
-        this.setState( ({data}) => {
-            const newArr = [...data, newItem];
-
-            return {
-                data: newArr
+            const newItem = {
+                name,
+                salary,
+                increase: false,
+                rise:false,
+                id: this.maxId++
             }
-        })
+            
+            this.setState( ({data}) => {
+                const newArr = [...data, newItem];
+    
+                return {
+                    data: newArr
+                }
+            })
     }
     
     onToggleProp = (id, prop) => {
@@ -59,10 +60,26 @@ class App extends Component {
             }
         })
     }
+
+    searchEmployee = (arr, term) => {
+        if (term.length === 0) {
+            return arr;
+        }
+
+        return arr.filter(item => {
+            return item.name.indexOf(term) > -1
+        }) //массив с работниками, прошедшими фильтр по имени. Поиск во всем слове, не по первой букве
+    }
+
+    onUpdateSearch = (term) => {
+        this.setState({term}); // возврат объекта {term: term};
+    }
  
     render() {
+        const {data, term} = this.state;
         const employees = this.state.data.length;
         const increased = this.state.data.filter(item => item.increase).length; // increased - получат премию
+        const visibleData = this.searchEmployee(data, term);
 
         return (
             <div className="app">
@@ -71,11 +88,11 @@ class App extends Component {
                 increased = {increased}/>
     
                 <div className="search-panel">
-                    <SearchPanel/>
+                    <SearchPanel onUpdateSearch = {this.onUpdateSearch}/>
                     <AppFilter/>
                 </div>
                 <EmployeesList
-                data = {this.state.data}
+                data = {visibleData}
                 onDelete = {this.deleteItem}
                 onToggleProp = {this.onToggleProp}/>
                 <EmployeesAddForm onAdd = {this.addItem}/>
