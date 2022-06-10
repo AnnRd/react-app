@@ -17,7 +17,8 @@ class App extends Component {
                 {name: 'David Smith', salary: 3000, increase: true, rise: false, id: 2},
                 {name: 'Michael Cornel', salary: 5000, increase: false, rise: false, id: 3}
             ],
-            term: ''
+            term: '',
+            filter: ''
         }
         this.maxId = 4;
     }
@@ -74,12 +75,25 @@ class App extends Component {
     onUpdateSearch = (term) => {
         this.setState({term}); // возврат объекта {term: term};
     }
+
+    filterEmployees = (arr, filter) => {
+        switch (filter) {
+            case 'rise':
+                return arr.filter(item => item.rise);
+
+            case 'moreThen1000':
+                return arr.filter(item => item.salary > 1000);
+        
+            default:
+                return arr;
+        }
+    }
  
     render() {
-        const {data, term} = this.state;
+        const {data, term, filter} = this.state;
         const employees = this.state.data.length;
         const increased = this.state.data.filter(item => item.increase).length; // increased - получат премию
-        const visibleData = this.searchEmployee(data, term);
+        const visibleData = this.filterEmployees(this.searchEmployee(data, term), filter); // двойная фильтрация - фильтрует отфильтрованный массив
 
         return (
             <div className="app">
