@@ -8,14 +8,15 @@ const AppFilter = (props) => {
     ];
 
     const buttons = buttonsData.map(({name, label}) => {
-        const active = props.filter === name; //кпонка активна, если строка filter совпадает со строкой name
+        const active = props.filter === name; //кнопка активна, если строка filter совпадает со строкой name
         const classNaming = active ? 'btn-light' : 'btn-outline-light';
 
         return (
                 <button 
-                className={`btn ${classNaming}`}
-                type="button"
-                key={name}>
+                    className={`btn ${classNaming}`}
+                    type="button"
+                    key={name}
+                    onClick={() => props.onFilterSelection(name)}>
                     {label}
                 </button>
         )
